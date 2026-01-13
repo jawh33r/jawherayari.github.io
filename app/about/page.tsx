@@ -43,12 +43,12 @@ export default function About() {
           className="prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-12"
         >
           <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-4 px-2">
-            I'm Jawher Ayari, a dedicated software engineer and web developer with a passion for 
+            I&apos;m Jawher Ayari, a dedicated software engineer and web developer with a passion for 
             creating efficient, scalable solutions. My journey in software development has been 
             driven by curiosity and a commitment to continuous learning.
           </p>
           <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-4 px-2">
-            With experience in software engineering and web development, I've worked on various 
+            With experience in software engineering and web development, I&apos;ve worked on various 
             projects that showcase my technical skills and problem-solving abilities. You can 
             explore my work on{' '}
             <a
@@ -140,11 +140,11 @@ export default function About() {
             >
               n8n.jawherayari.me
             </a>{' '}
-            showcases various automation workflows I've built to streamline processes, integrate 
+            showcases various automation workflows I&apos;ve built to streamline processes, integrate 
             services, and improve productivity.
           </p>
           <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-            Whether it's API integrations, data processing, or complex multi-step workflows, 
+            Whether it&apos;s API integrations, data processing, or complex multi-step workflows, 
             I leverage n8n to create efficient automation solutions that save time and reduce 
             manual work.
           </p>

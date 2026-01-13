@@ -105,7 +105,7 @@ export default function Links() {
             >
               n8n automation dashboard
             </a>{' '}
-            to see live examples of workflow automation solutions I've built. These workflows 
+            to see live examples of workflow automation solutions I&apos;ve built. These workflows 
             demonstrate integrations, data processing, and automated task management.
           </p>
         </motion.div>
