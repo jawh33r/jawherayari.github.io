@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, User, Briefcase, GraduationCap, MoreHorizontal } from 'lucide-react'
+import { Mail, User, Briefcase, GraduationCap, MoreHorizontal, LogOut } from 'lucide-react'
 
 interface AccessRequest {
   id: string
@@ -25,9 +26,35 @@ const purposeIcons = {
 }
 
 export default function Login() {
+  const router = useRouter()
   const [requests, setRequests] = useState<AccessRequest[]>([])
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
+    // Check authentication
+    const authToken = sessionStorage.getItem('auth_token')
+    const authTime = sessionStorage.getItem('auth_time')
+    
+    if (!authToken || !authTime) {
+      router.push('/auth')
+      return
+    }
+
+    // Check if session is expired (24 hours)
+    const sessionTime = parseInt(authTime, 10)
+    const now = Date.now()
+    const twentyFourHours = 24 * 60 * 60 * 1000
+
+    if (now - sessionTime > twentyFourHours) {
+      sessionStorage.removeItem('auth_token')
+      sessionStorage.removeItem('auth_email')
+      sessionStorage.removeItem('auth_time')
+      router.push('/auth')
+      return
+    }
+
+    setIsAuthenticated(true)
+
     // Load requests from localStorage
     const storedRequests = localStorage.getItem('n8n_access_requests')
     if (storedRequests) {
@@ -38,7 +65,18 @@ export default function Login() {
         console.error('Error parsing requests:', e)
       }
     }
-  }, [])
+  }, [router])
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('auth_token')
+    sessionStorage.removeItem('auth_email')
+    sessionStorage.removeItem('auth_time')
+    router.push('/auth')
+  }
+
+  if (!isAuthenticated) {
+    return null // Will redirect in useEffect
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -60,12 +98,26 @@ export default function Login() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">
-            n8n Access Requests
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4">
-            Manage access requests for n8n automation platform
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1"></div>
+            <div className="flex-1 text-center">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">
+                n8n Access Requests
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4">
+                Manage access requests for n8n automation platform
+              </p>
+            </div>
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              >
+                <LogOut className="mr-2" size={16} />
+                Logout
+              </button>
+            </div>
+          </div>
         </motion.div>
 
         {requests.length === 0 ? (
