@@ -17,7 +17,7 @@ const hashPassword = (password: string): string => {
 }
 
 // Hashed password for '7050' (calculated once)
-const ADMIN_PASSWORD_HASH = '1b58' // hash of '7050'
+const ADMIN_PASSWORD_HASH = '19bb34' // hash of '7050'
 const ADMIN_EMAIL = 'jawh3r@gmail.com'
 
 export default function Auth() {

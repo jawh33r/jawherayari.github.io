@@ -29,31 +29,43 @@ export default function Login() {
   const router = useRouter()
   const [requests, setRequests] = useState<AccessRequest[]>([])
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isChecking, setIsChecking] = useState(true)
 
   useEffect(() => {
     // Check authentication
-    const authToken = sessionStorage.getItem('auth_token')
-    const authTime = sessionStorage.getItem('auth_time')
-    
-    if (!authToken || !authTime) {
-      router.push('/auth')
-      return
+    const checkAuth = () => {
+      const authToken = sessionStorage.getItem('auth_token')
+      const authTime = sessionStorage.getItem('auth_time')
+      
+      if (!authToken || !authTime) {
+        router.push('/auth')
+        return false
+      }
+
+      // Check if session is expired (24 hours)
+      const sessionTime = parseInt(authTime, 10)
+      const now = Date.now()
+      const twentyFourHours = 24 * 60 * 60 * 1000
+
+      if (now - sessionTime > twentyFourHours) {
+        sessionStorage.removeItem('auth_token')
+        sessionStorage.removeItem('auth_email')
+        sessionStorage.removeItem('auth_time')
+        router.push('/auth')
+        return false
+      }
+
+      return true
     }
 
-    // Check if session is expired (24 hours)
-    const sessionTime = parseInt(authTime, 10)
-    const now = Date.now()
-    const twentyFourHours = 24 * 60 * 60 * 1000
-
-    if (now - sessionTime > twentyFourHours) {
-      sessionStorage.removeItem('auth_token')
-      sessionStorage.removeItem('auth_email')
-      sessionStorage.removeItem('auth_time')
-      router.push('/auth')
+    const authenticated = checkAuth()
+    
+    if (!authenticated) {
       return
     }
 
     setIsAuthenticated(true)
+    setIsChecking(false)
 
     // Load requests from localStorage
     const storedRequests = localStorage.getItem('n8n_access_requests')
@@ -74,8 +86,15 @@ export default function Login() {
     router.push('/auth')
   }
 
-  if (!isAuthenticated) {
-    return null // Will redirect in useEffect
+  if (isChecking || !isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Checking authentication...</p>
+        </div>
+      </div>
+    )
   }
 
   const formatDate = (dateString: string) => {
