@@ -1,0 +1,213 @@
+'use client'
+
+import { useState, FormEvent } from 'react'
+import { motion } from 'framer-motion'
+import { Send, Mail, MessageSquare, User } from 'lucide-react'
+
+export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  })
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setStatus('sending')
+
+    // In a real application, you would send this to a backend API
+    // For now, we'll simulate a submission
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      
+      // You can integrate with services like Formspree, EmailJS, or your own backend
+      // Example with Formspree:
+      // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // })
+      
+      setStatus('success')
+      setFormData({ name: '', email: '', message: '' })
+      
+      // Reset status after 3 seconds
+      setTimeout(() => setStatus('idle'), 3000)
+    } catch (error) {
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 3000)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  return (
+    <div className="min-h-screen py-12 sm:py-16 md:py-20 relative z-10">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8 sm:mb-12"
+        >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">Get In Touch</h1>
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4">
+            Have a question or want to work together? Send me a message!
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <User className="inline mr-2" size={16} />
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-base min-h-[44px]"
+                placeholder="Your name"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Mail className="inline mr-2" size={16} />
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-base min-h-[44px]"
+                placeholder="your.email@example.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <MessageSquare className="inline mr-2" size={16} />
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                rows={6}
+                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-base min-h-[120px]"
+                placeholder="Your message..."
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full px-6 py-3.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center text-base min-h-[44px] touch-manipulation"
+            >
+              {status === 'sending' ? (
+                <>
+                  <span className="animate-spin mr-2">⏳</span>
+                  Sending...
+                </>
+              ) : status === 'success' ? (
+                <>
+                  <span className="mr-2">✓</span>
+                  Message Sent!
+                </>
+              ) : (
+                <>
+                  <Send className="mr-2" size={20} />
+                  Send Message
+                </>
+              )}
+            </button>
+
+            {status === 'error' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400"
+              >
+                Failed to send message. Please try again or reach out via{' '}
+                <a
+                  href="https://www.linkedin.com/in/jawher-ayari-859ba1283/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  LinkedIn
+                </a>
+                .
+              </motion.div>
+            )}
+
+            {status === 'success' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
+              >
+                Thank you! Your message has been sent successfully.
+              </motion.div>
+            )}
+          </form>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-12 p-6 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+        >
+          <h3 className="text-lg font-semibold mb-3">Other Ways to Reach Me</h3>
+          <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <p>
+              <strong>LinkedIn:</strong>{' '}
+              <a
+                href="https://www.linkedin.com/in/jawher-ayari-859ba1283/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                jawher-ayari-859ba1283
+              </a>
+            </p>
+            <p>
+              <strong>GitHub:</strong>{' '}
+              <a
+                href="https://github.com/jawh33r"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                @jawh33r
+              </a>
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
