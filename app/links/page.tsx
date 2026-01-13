@@ -13,7 +13,7 @@ const links = [
   },
   {
     name: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/jawher-ayari-859ba1283/',
+    url: 'https://www.linkedin.com/in/jawherayarii/',
     icon: Linkedin,
     description: 'Connect with me on LinkedIn',
     color: 'from-blue-600 to-blue-800',

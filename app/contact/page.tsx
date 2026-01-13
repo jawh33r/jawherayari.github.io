@@ -165,7 +165,7 @@ export default function Contact() {
               >
                 Failed to submit request. Please try again or reach out via{' '}
                 <a
-                  href="https://www.linkedin.com/in/jawher-ayari-859ba1283/"
+                  href="https://www.linkedin.com/in/jawherayarii/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline"
