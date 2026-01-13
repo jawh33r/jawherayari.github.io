@@ -2,13 +2,13 @@
 
 import { useState, FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { Send, Mail, MessageSquare, User } from 'lucide-react'
+import { Send, Mail, User, Zap } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: '',
+    purpose: 'student' as 'student' | 'for work' | 'other',
   })
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
 
@@ -16,22 +16,31 @@ export default function Contact() {
     e.preventDefault()
     setStatus('sending')
 
-    // In a real application, you would send this to a backend API
-    // For now, we'll simulate a submission
     try {
-      // Simulate API call
+      // Store request in localStorage
+      const request = {
+        id: Date.now().toString(),
+        name: formData.name,
+        email: formData.email,
+        purpose: formData.purpose,
+        timestamp: new Date().toISOString(),
+      }
+
+      // Get existing requests
+      const existingRequests = localStorage.getItem('n8n_access_requests')
+      const requests = existingRequests ? JSON.parse(existingRequests) : []
+      
+      // Add new request
+      requests.push(request)
+      
+      // Save to localStorage
+      localStorage.setItem('n8n_access_requests', JSON.stringify(requests))
+      
+      // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000))
       
-      // You can integrate with services like Formspree, EmailJS, or your own backend
-      // Example with Formspree:
-      // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // })
-      
       setStatus('success')
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({ name: '', email: '', purpose: 'student' })
       
       // Reset status after 3 seconds
       setTimeout(() => setStatus('idle'), 3000)
@@ -41,7 +50,7 @@ export default function Contact() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -57,9 +66,12 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">Get In Touch</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2 flex items-center justify-center gap-2">
+            <Zap className="text-blue-600 dark:text-blue-400" size={32} />
+            Request n8n Access
+          </h1>
           <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4">
-            Have a question or want to work together? Send me a message!
+            Request access to the n8n automation platform
           </p>
         </motion.div>
 
@@ -104,20 +116,22 @@ export default function Contact() {
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                <MessageSquare className="inline mr-2" size={16} />
-                Message
+              <label htmlFor="purpose" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Zap className="inline mr-2" size={16} />
+                Purpose
               </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
+              <select
+                id="purpose"
+                name="purpose"
+                value={formData.purpose}
                 onChange={handleChange}
                 required
-                rows={6}
-                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-base min-h-[120px]"
-                placeholder="Your message..."
-              />
+                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-base min-h-[44px]"
+              >
+                <option value="student">Student</option>
+                <option value="for work">For Work</option>
+                <option value="other">Other</option>
+              </select>
             </div>
 
             <button
@@ -128,17 +142,17 @@ export default function Contact() {
               {status === 'sending' ? (
                 <>
                   <span className="animate-spin mr-2">⏳</span>
-                  Sending...
+                  Submitting...
                 </>
               ) : status === 'success' ? (
                 <>
                   <span className="mr-2">✓</span>
-                  Message Sent!
+                  Request Submitted!
                 </>
               ) : (
                 <>
                   <Send className="mr-2" size={20} />
-                  Send Message
+                  Submit Request
                 </>
               )}
             </button>
@@ -149,7 +163,7 @@ export default function Contact() {
                 animate={{ opacity: 1 }}
                 className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400"
               >
-                Failed to send message. Please try again or reach out via{' '}
+                Failed to submit request. Please try again or reach out via{' '}
                 <a
                   href="https://www.linkedin.com/in/jawher-ayari-859ba1283/"
                   target="_blank"
@@ -168,7 +182,7 @@ export default function Contact() {
                 animate={{ opacity: 1 }}
                 className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
               >
-                Thank you! Your message has been sent successfully.
+                Thank you! Your n8n access request has been submitted successfully. You will receive access via email.
               </motion.div>
             )}
           </form>
