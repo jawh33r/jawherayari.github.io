@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   description: 'Portfolio of Jawher Ayari - Software engineering and web development professional with expertise in automation workflows using n8n',
   keywords: ['Jawher Ayari', 'Software Engineer', 'Web Developer', 'n8n', 'Automation', 'GitHub'],
   authors: [{ name: 'Jawher Ayari' }],
+  icons: {
+    icon: '/profile2.png',
+    apple: '/profile2.png',
+  },
   openGraph: {
     title: 'Jawher Ayari - Software Engineer & Web Developer',
     description: 'Portfolio of Jawher Ayari - Software engineering and web development professional',
