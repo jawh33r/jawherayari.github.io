@@ -40,6 +40,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './out'
+      
+      - name: List out directory
+        run: ls -la out/ | head -20
 
   deploy:
     environment:
