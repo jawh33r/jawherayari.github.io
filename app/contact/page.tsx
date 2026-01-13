@@ -199,12 +199,12 @@ export default function Contact() {
             <p>
               <strong>LinkedIn:</strong>{' '}
               <a
-                href="https://www.linkedin.com/in/jawher-ayari-859ba1283/"
+                href="https://www.linkedin.com/in/jawherayarii/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 dark:text-blue-400 hover:underline"
               >
-                jawher-ayari-859ba1283
+                jawherayarii
               </a>
             </p>
             <p>
