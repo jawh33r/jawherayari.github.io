@@ -66,12 +66,11 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2 flex items-center justify-center gap-2">
-            <Zap className="text-blue-600 dark:text-blue-400" size={32} />
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 px-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Request n8n Access
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4">
-            Request access to the n8n automation platform
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 px-4 max-w-2xl mx-auto">
+            Get access to the n8n automation platform. Fill out the form below and we&apos;ll send you access credentials.
           </p>
         </motion.div>
 
@@ -79,8 +78,15 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          className="max-w-lg mx-auto"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8">
+            <div className="flex items-center justify-center mb-6">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600">
+                <Zap className="text-white" size={32} />
+              </div>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <User className="inline mr-2" size={16} />
@@ -186,6 +192,7 @@ export default function Contact() {
               </motion.div>
             )}
           </form>
+          </div>
         </motion.div>
 
         <motion.div
