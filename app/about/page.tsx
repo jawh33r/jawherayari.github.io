@@ -23,7 +23,7 @@ export default function About() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-2xl opacity-50 animate-pulse"></div>
               <img
-                src="/profile.jpg"
+                src="/profile2.png"
                 alt="Jawher Ayari"
                 className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-xl object-cover border-3 sm:border-4 border-white dark:border-gray-800 shadow-2xl"
               />
